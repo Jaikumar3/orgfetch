@@ -103,5 +103,10 @@ Fetch for multiple orgs/groups listed in a file:
 - For multiple orgs/groups, provide a file with one name per line to `--orgname`.
 - All output modes (console, file, pipe) work for multiple orgs/groups and all flag combinations.
 
+## Author
+Jai aka hacdoc
+## License
+MIT
+
 ## License
 MIT
