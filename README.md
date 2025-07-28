@@ -105,8 +105,7 @@ Fetch for multiple orgs/groups listed in a file:
 
 ## Author
 Jai aka hacdoc
-## License
-MIT
 
 ## License
 MIT
+
