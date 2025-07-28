@@ -6,7 +6,7 @@ A powerful Go CLI tool to fetch and report organization/group members and reposi
 - Fetch organization (GitHub) or group (GitLab) members and repositories
 - Filter by member, repo type, and fork status
 - Print colored output and repo URLs
-- Download repositories (with size limit)
+- Download repositories (with size limit, supports parallel/concurrent cloning)
 - Output results to file
 - Read multiple orgs/groups from a file (pass filename to --orgname)
 - Print only repo URLs (`--urls-only`) or only usernames (`--usernames-only`)
@@ -65,11 +65,16 @@ Print only usernames of org/group members:
 ./orgfetch --provider gitlab --token <TOKEN> --orgname <GROUP> --usernames-only
 ```
 
-Download all org/group repos (max size 250MB):
+Download all org/group repos in parallel (max size 250MB, 4 concurrent by default):
 ```
 ./orgfetch --provider github --token <TOKEN> --orgname <ORG> --download
 ./orgfetch --provider gitlab --token <TOKEN> --orgname <GROUP> --download
 ```
+Increase parallelism (e.g., 8 concurrent clones):
+```
+./orgfetch --provider github --token <TOKEN> --orgname <ORG> --download --parallel 8
+```
+> **Note:** Repositories are now downloaded in parallel using a worker pool. Use `--parallel` (or `-P`) to control concurrency (default: 4).
 
 Save results to a file:
 ```
@@ -93,6 +98,7 @@ Fetch for multiple orgs/groups listed in a file:
 - `--repo-type`, `-r`: Type of repositories to fetch: org, member, both (default: org)
 - `--member`, `-m`: Username to fetch repos for particular user/member (only used with --repo-type member)
 - `--download`, `-d`: Download all listed repositories using git clone
+- `--parallel`, `-P`: Number of concurrent clones when using --download (default: 4)
 - `--urls-only`, `-u`: Print only repo URLs (no names)
 - `--usernames-only`, `-U`: Print only usernames of organization/group members (one per line)
 - `--max-size`, `-s`: Maximum repo size (MB) to clone (default: 250)
@@ -102,10 +108,7 @@ Fetch for multiple orgs/groups listed in a file:
 - For GitLab, a token is required (public-only support can be added if needed).
 - For multiple orgs/groups, provide a file with one name per line to `--orgname`.
 - All output modes (console, file, pipe) work for multiple orgs/groups and all flag combinations.
-
-## Author
-Jai aka hacdoc
+- When using `--download`, repositories are cloned in parallel for speed. Use `--parallel` to control the number of concurrent clones.
 
 ## License
 MIT
-
